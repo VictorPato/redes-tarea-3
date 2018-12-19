@@ -22,7 +22,9 @@ class Router(object):
         :param message:
         :return:
         """
-        print("[{}] {}: {}".format(self.name, 'Success! Data', message))
+        f = open('logs.txt', 'a+')
+        f.write(str(datetime.datetime.now())[:-7] + " [{}] {}: {}".format(self.name, 'Success! Data', message) + "\n")
+        f.close()
 
     def _log(self, message):
         """
@@ -32,7 +34,7 @@ class Router(object):
         """
         if self.logging:
             f = open('logs.txt', 'a+')
-            f.write(str(datetime.datetime.now()) + " [{}] {}".format(self.name, message) + "\n")
+            f.write(str(datetime.datetime.now())[:-7] + " [{}] {}".format(self.name, message) + "\n")
             f.close()
 
     def _init_ports(self, ports):
