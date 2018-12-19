@@ -1,0 +1,29 @@
+<meta charset="UTF-8"> 
+
+<h1 id="tarea3cc4303redes">Tarea 3 CC4303-Redes</h1>
+
+<p>Tarea 3 del curso de Redes.</p>
+
+<h2 id="integrantes">Integrantes</h2>
+
+<ul>
+<li>Pedro Belmonte</li>
+
+<li>Víctor Garrido</li>
+</ul>
+
+<h2 id="cmocorrerlatarea">Cómo correr la tarea</h2>
+
+<p>La tarea fue resuelta en Python 3, para Ubuntu x64. A continuación se indica cómo correrla.</p>
+
+<p>La ejecución es casi idéntica al ejemplo del enunciado, pero se debe indicar además un atributo nuevo llamado "type" con valor "d" para indicar que el paquete contiene datos y no una tabla de ruta (type "t"). Se recomienda ejecutar cada línea por consola y no programáticamente de manera de poder enviar varios paquetes a la red sin problemas y ver los mensajes de logging más fácilmente.</p>
+
+<pre><code>$ from topology import start, stop
+$ from send_packet import send_packet
+$ import json
+$ routers = start('topology.json')
+$ send_packet(12345, json.dumps({'type': "d", 'destination': "Router#3", 'data': "Saludos"}))
+$ stop(routers)
+</code></pre>
+
+<p>El logging ya no se muestra en la consola sino que se crea un archivo "logs.txt" con los logs de cada evento. Además se modificaron los logs para que fueran más explicativos.</p>
