@@ -12,6 +12,8 @@ class Router(object):
         self.name = name
         self.update_time = update_time
         self.ports = dict()
+        self.routing_table = dict()
+        self.routing_table[name] = 0, 0
         self._init_ports(ports)
         self.timer = None
         self.logging = logging
@@ -48,7 +50,6 @@ class Router(object):
             router_port = RouterPort(
                 input_port, output_port, lambda p: self._new_packet_received(p)
             )
-
             self.ports[output_port] = router_port
 
     def _new_packet_received(self, packet):
@@ -66,14 +67,25 @@ class Router(object):
             self._log("Malformed packet")
             return
 
-        if 'destination' in message and 'data' in message:
-            if message['destination'] == self.name:
-                self._success(message['data'])
-            else:
-                # Randomly choose a port to forward
-                port = choice(list(self.ports.keys()))
-                self._log("Forwarding to port {}".format(port))
-                self.ports[port].send_packet(packet)
+        if 'destination' in message and 'data' in message and 'type' in message:
+            if message['type'] == 'd':
+                if message['destination'] == self.name:
+                    self._success(message['data'])
+                else:
+                    if message["destination"] not in self.routing_table:
+                        self._log("No route known for {}".format(message["destination"]))
+                    else:
+                        port = self.routing_table[message["destination"]][1]
+                        self.ports[port].send_packet(packet)
+            elif message['type'] == 't':
+                # todo: quizas no
+                tabla_del_otro_router = json.load(message['data'])
+                for destino, val in tabla_del_otro_router.items:
+                    distancia = val[0]
+                    if not destino in self.routing_table:
+                        self.routing_table[destino] = distancia + 1, message['destination']
+                    elif self.routing_table[destino][0] > distancia + 1:
+                        self.routing_table[destino] = distancia + 1, message['destination']
         else:
             self._log("Malformed packet")
 
@@ -83,6 +95,12 @@ class Router(object):
         :return: None
         """
         self._log("Broadcasting")
+        for output_port, router_port in self.ports.items():
+            packet = dict()
+            packet["data"] = json.dumps(self.routing_table)
+            packet["type"] = 'd'
+            packet["destination"] = router_port.input_port
+            router_port.send_packet(packet)
         self.timer = Timer(self.update_time, lambda: self._broadcast())
         self.timer.start()
 
