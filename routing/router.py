@@ -102,7 +102,8 @@ class Router(object):
             packet["data"] = json.dumps(self.routing_table)
             packet["type"] = 'd'
             packet["destination"] = router_port.input_port
-            router_port.send_packet(packet)
+            binary_packet = json.dumps(packet).encode()
+            router_port.send_packet(binary_packet)
         self.timer = Timer(self.update_time, lambda: self._broadcast())
         self.timer.start()
 
