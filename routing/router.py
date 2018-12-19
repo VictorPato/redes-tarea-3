@@ -60,7 +60,6 @@ class Router(object):
         :param packet:
         :return: None
         """
-        self._log("Packet received")
         message = packet.decode()
 
         try:
@@ -71,6 +70,7 @@ class Router(object):
 
         if 'destination' in message and 'data' in message and 'type' in message:
             if message['type'] == 'd':
+                self._log("{} received data package".format(self.name))
                 if message['destination'] == self.name:
                     self._success(message['data'])
                 else:
@@ -78,16 +78,26 @@ class Router(object):
                         self._log("No route known for {}".format(message["destination"]))
                     else:
                         port = self.routing_table[message["destination"]][1]
+                        self._log("{} sent data package to port {}".format(self.name, port))
                         self.ports[port].send_packet(packet)
             elif message['type'] == 't':
-                # todo: quizas no
                 tabla_del_otro_router = json.loads(message['data'])
+                updated_my_table = False
                 for destino, val in tabla_del_otro_router.items():
                     distancia = val[0]
-                    if not destino in self.routing_table:
+                    if destino not in self.routing_table:
+                        updated_my_table = True
                         self.routing_table[destino] = distancia + 1, message['destination']
                     elif self.routing_table[destino][0] > distancia + 1:
+                        updated_my_table = True
                         self.routing_table[destino] = distancia + 1, message['destination']
+                if updated_my_table:
+                    self._log("{} updated it's routing table for port {}".format(self.name, message["destination"]))
+                else:
+                    self._log("{} received a new table for port {}, but didn't update anything".format(self.name,
+                                                                                                       message[
+                                                                                                           "destination"]))
+
         else:
             self._log("Malformed packet")
 
