@@ -1,0 +1,94 @@
+{
+  "routers": [
+    {
+      "name": "Router#1",
+      "ports": [
+        {
+          "input": 12345,
+          "output": 12346
+        }
+      ]
+    },
+    {
+      "name": "Router#2",
+      "ports": [
+        {
+          "input": 12346,
+          "output": 12345
+        },
+        {
+          "input": 4321,
+          "output": 4444
+        },
+        {
+          "input": 5656,
+          "output": 5555
+        },
+        {
+          "input": 6665,
+          "output": 6666
+        }
+      ]
+    },
+    {
+      "name": "Router#3",
+      "ports": [
+        {
+          "input": 5555,
+          "output": 5656
+        },
+                {
+          "input": 7776,
+          "output": 7777
+        },
+                {
+          "input": 8887,
+          "output": 8888
+        }
+      ]
+    },
+    {
+      "name": "Router#4",
+      "ports": [
+        {
+          "input": 6666,
+          "output": 6665
+        },
+                {
+          "input": 7777,
+          "output": 7776
+        },
+                {
+          "input": 8999,
+          "output": 9000
+        }
+      ]
+    },
+    {
+      "name": "Router#5",
+      "ports": [
+        {
+          "input": 8888,
+          "output": 8887
+        },
+        {
+          "input": 9998,
+          "output": 9999
+        }
+      ]
+    },
+    {
+      "name": "Router#6",
+      "ports": [
+        {
+          "input": 9000,
+          "output": 8999
+        },
+        {
+          "input": 9999,
+          "output": 9998
+        }
+      ]
+    }
+  ]
+}
