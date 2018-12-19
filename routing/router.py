@@ -2,6 +2,7 @@ import json
 from json import JSONDecodeError
 from random import choice
 from threading import Timer
+import datetime
 
 from routing.router_port import RouterPort
 
@@ -30,7 +31,9 @@ class Router(object):
         :return: None
         """
         if self.logging:
-            print("[{}] {}".format(self.name, message))
+            f = open('logs.txt', 'a+')
+            f.write(str(datetime.datetime.now()) + " [{}] {}".format(self.name, message) + "\n")
+            f.close()
 
     def _init_ports(self, ports):
         """

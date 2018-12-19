@@ -6,6 +6,11 @@ update_time = 5
 
 
 def start(topology_path):
+
+    # Clean logs file
+    f = open('logs.txt', 'w')
+    f.write("")
+
     with open(topology_path) as topology_file:
         topology = json.load(topology_file)
 
