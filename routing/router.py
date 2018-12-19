@@ -81,8 +81,8 @@ class Router(object):
                         self.ports[port].send_packet(packet)
             elif message['type'] == 't':
                 # todo: quizas no
-                tabla_del_otro_router = json.load(message['data'])
-                for destino, val in tabla_del_otro_router.items:
+                tabla_del_otro_router = json.loads(message['data'])
+                for destino, val in tabla_del_otro_router.items():
                     distancia = val[0]
                     if not destino in self.routing_table:
                         self.routing_table[destino] = distancia + 1, message['destination']
@@ -100,7 +100,7 @@ class Router(object):
         for output_port, router_port in self.ports.items():
             packet = dict()
             packet["data"] = json.dumps(self.routing_table)
-            packet["type"] = 'd'
+            packet["type"] = 't'
             packet["destination"] = router_port.input_port
             binary_packet = json.dumps(packet).encode()
             router_port.send_packet(binary_packet)
